@@ -124,4 +124,3 @@ module.exports = db;
 //   await sequelize.sync({ alter: true });
 //   logger.info('Database synchronized successfully!');
 // })();
-
