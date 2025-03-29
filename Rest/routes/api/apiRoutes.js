@@ -6,6 +6,7 @@ const retryMiddleware = require("../../middlewares/retryMiddleware");
 const venueController = require("../../controllers/venueController");
 const taxController = require("../../controllers/taxController");
 const resourceController = require("../../controllers/resourceController");
+const sessionProductController = require("../../controllers/sessionProductController");
 
 // Venue routes
 router.post("/venue/create", retryMiddleware(venueController.createVenue));
@@ -35,6 +36,16 @@ router.put("/resource/:id", retryMiddleware(resourceController.updateResource));
 router.delete(
   "/resource/:id",
   retryMiddleware(resourceController.deleteResource)
+);
+
+router.post(
+  "/session-product/create",
+  retryMiddleware(sessionProductController.createSessionProduct)
+);
+
+router.get(
+  "/session-products",
+  retryMiddleware(sessionProductController.getSessionProducts)
 );
 
 module.exports = router;
