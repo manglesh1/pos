@@ -1,30 +1,38 @@
 module.exports = (sequelize, DataTypes) => {
-  const Role = sequelize.define("Role", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+  const Role = sequelize.define(
+    'Role',
+    {
+      roleId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      roleName: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
     },
-    name: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      unique: true,
-    },
-    description: {
-      type: DataTypes.STRING(255),
-    },
-  });
+    {
+      tableName: 'Roles',
+      timestamps: false,
+      indexes: [
+        {
+          unique: true,
+          fields: ['roleName'],
+        },
+      ],
+    }
+  );
 
   Role.associate = (models) => {
-    Role.belongsToMany(models.User, {
-      through: models.UserRole,
-      foreignKey: "roleId",
-      as: "users",
+    Role.hasMany(models.User, {
+      foreignKey: 'roleId',
+      as: 'users',
     });
-    Role.belongsToMany(models.UiTable, {
-      through: "RolePermissions",
-      foreignKey: "roleId",
-      as: "permissions",
+    Role.belongsToMany(models.UI, {
+      through: models.RoleUI,
+      foreignKey: 'roleId',
+      as: 'uiPaths',
     });
   };
 

@@ -1,40 +1,60 @@
-module.exports = (sequelize, DataTypes) => {
-  const Tax = sequelize.define("Tax", {
-    taxId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
-    amount: {
-      type: DataTypes.DECIMAL(5, 2), 
-      allowNull: false,
-    },
-    isDefault: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    includeTaxInPrice: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    addTaxToPrice: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    hideTaxLabels: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-  });
+const { DataTypes } = require('sequelize');
+const BaseModel = require('./baseModel.js');
 
-  // No associations for now
-  return Tax;
+module.exports = (sequelize) => {
+  class User extends BaseModel {
+    static associate(models) {
+      // Associate User with Role
+      User.belongsTo(models.Role, {
+        foreignKey: 'roleId',
+        as: 'role',
+      });
+
+      // Associate User with Venue using inherited method
+      this.associateWithVenue(models.Venue);
+    }
+  }
+
+  User.initWithVenue(
+    {
+      userId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      username: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      roleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Roles',
+          key: 'roleId',
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: 'User',
+      tableName: 'Users',
+      timestamps: true,
+    }
+  );
+
+  return User;
 };

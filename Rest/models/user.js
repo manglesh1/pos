@@ -1,61 +1,56 @@
-const role = require("./role");
+const { DataTypes } = require('sequelize');
+const BaseModel = require('./baseModel.js');
 
-module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define("User", {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    username: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
+module.exports = (sequelize) => {
+  class User extends BaseModel {
+    static associate(models) {
+      // Associate User with Role
+      User.belongsTo(models.Role, {
+        foreignKey: 'roleId',
+        as: 'role',
+      });
+
+      // Associate User with Venue using inherited method
+      this.associateWithVenue(models.Venue);
+    }
+  }
+
+  User.initWithVenue(
+    {
+      userId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      email: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
+      roleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Roles',
+          key: 'roleId',
+        },
       },
     },
-    fullName: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
-    isActive: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-    },
-    roleId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: role,
-        key: "id",
-      }
-    },
-  });
-
-  // User.associate = (models) => {
-  //   User.belongsToMany(models.Role, {
-  //     through: models.UserRole,
-  //     foreignKey: "userId",
-  //     as: "roles",
-  //   });
-  // };
-
-  User.associate = (models) => {
-    role.belongsToMany(models.User, {
-      through: models.UserRole,
-      foreignKey: "roleId",
-      as: "users",
-    })
-  };
+    {
+      sequelize,
+      modelName: 'User',
+      tableName: 'Users',
+      timestamps: true,
+    }
+  );
 
   return User;
 };

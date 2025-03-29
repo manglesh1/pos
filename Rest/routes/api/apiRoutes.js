@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const retryMiddleware = require("../../middlewares/retryMiddleware");
 
+/*
 // Import controllers
 const venueController = require("../../controllers/venueController");
 const taxController = require("../../controllers/taxController");
@@ -47,5 +48,5 @@ router.get(
   "/session-products",
   retryMiddleware(sessionProductController.getSessionProducts)
 );
-
+*/
 module.exports = router;

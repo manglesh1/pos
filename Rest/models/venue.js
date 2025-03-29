@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Venue = sequelize.define("Venue", {
+  const Venue = sequelize.define('Venue', {
     venueId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     displayAddress: {
       type: DataTypes.STRING(500),
-      allowNull: true, // Optional field
+      allowNull: true,
     },
     contactName: {
       type: DataTypes.STRING(100),
@@ -43,6 +43,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  // No associations for now
+  Venue.associate = (models) => {
+    // Define one-to-many association
+    Venue.hasMany(models.Resource, {
+      foreignKey: 'venueId',
+      as: 'resources',
+    });
+  };
+
   return Venue;
 };
