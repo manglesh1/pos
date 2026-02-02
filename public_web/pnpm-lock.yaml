@@ -8,6 +8,9 @@ dependencies:
   next:
     specifier: 15.1.7
     version: 15.1.7(react-dom@19.0.0)(react@19.0.0)
+  public_web:
+    specifier: 'file:'
+    version: 'file:'
   react:
     specifier: ^19.0.0
     version: 19.0.0
@@ -3242,3 +3245,19 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  'file:':
+    resolution: {directory: '', type: directory}
+    name: public_web
+    dependencies:
+      next: 15.1.7(react-dom@19.0.0)(react@19.0.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@opentelemetry/api'
+      - '@playwright/test'
+      - babel-plugin-macros
+      - babel-plugin-react-compiler
+      - sass
+    dev: false
